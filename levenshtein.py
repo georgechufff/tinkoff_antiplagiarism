@@ -1,17 +1,20 @@
-
 def levenshtein(str1, str2):
-    n, m = len(str1), len(str2)
-    if n > m:
+    if len(str1) > len(str2):
         str1, str2 = str2, str1
-        n, m = m, n
 
-    cur_row = range(n + 1)
-    for i in range(1, m + 1):
-        pr_row, cur_row = cur_row, [i] + [0] * n
-        for j in range(1, n + 1):
-            add, delete, change = pr_row[j] + 1, cur_row[j - 1] + 1, pr_row[j - 1]
-            if str1[j - 1] != str2[i - 1]:
-                change += 1
-            cur_row[j] = min(add, delete, change)
+    arr = [[0] * (len(str1) + 1) for _ in range(len(str2) + 1)]
+    arr[0][0] = 0
 
-    return cur_row[n]
+    for i in range(1, len(str1) + 1):
+        arr[0][i] = i
+    for j in range(1, len(str2) + 1):
+        arr[j][0] = j
+
+    for i in range(1, len(str2) + 1):
+        for j in range(1, len(str1) + 1):
+            s = 1 if str1[j - 1] != str2[i - 1] else 0
+            arr[i][j] = min(arr[i][j-1] + 1, arr[i-1][j] + 1, arr[i-1][j-1] + s)
+
+    return arr[-1][-1]
+
+print(levenshtein("Лабрадор", "Гибралтар"))
