@@ -36,7 +36,7 @@ def compare_files(file1, file2, z) -> None:
                     str2 = normalize_text(
                         z.open(second_file).read().decode()
                     )
-                    result = round(levenshtein(str1, str2) / len(str1), 3)
+                    result = round(1 - (levenshtein(str1, str2) / max(len(str1), len(str2))), 3)
                     file2.write(str(result) + '\n')
                     print(f"The files {first_file} and {second_file} have been parsed and compared successfully.")
                 else:
